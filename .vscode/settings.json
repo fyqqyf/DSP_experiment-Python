@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "D:\\conda\\python.exe",
+    "python.formatting.provider": "yapf",
+    "python.linting.flake8Enabled": true
+}
