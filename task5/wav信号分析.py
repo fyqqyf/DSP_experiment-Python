@@ -1,8 +1,9 @@
 import wave
-from scipy.fftpack import fft
+from scipy.fftpack import fft, ifft
 import numpy as np
 import pylab as plt
 from matplotlib.pylab import mpl
+import scipy.signal as sg
 
 mpl.rcParams['font.sans-serif'] = ['SimHei']  #显示中文
 mpl.rcParams['axes.unicode_minus'] = False  #显示负号
@@ -24,16 +25,34 @@ wave_data = np.fromstring(str_data, dtype=np.short)
 wave_data.shape = -1, 2
 #转置数据
 wave_data = wave_data.T
-wave_data=wave_data[0]
+wave_data = wave_data[0]
 y = wave_data
 #通过取样点数和取样频率计算出每个取样的时间。
 time = np.arange(0, nframes) / framerate
+time1 = np.arange(0, 2048) / framerate / 2048 * nframes
+time2 = np.arange(0, 1024) / framerate / 1024 * nframes
 
+y1 = sg.resample(y, 2048)
+y2 = sg.resample(y, 1024)
 
-fft_y = fft(y)  #快速傅里叶变换
-N = 200
+fft_y1 = fft(y1)  #快速傅里叶变换
+N = 1000
 x0 = np.arange(N)  # 频率个数
 half_x = x0[range(int(N / 2))]  #取一半区间
+
+abs_y1 = np.abs(fft_y1)  # 取复数的绝对值，即复数的模(双边频谱)
+angle_y1 = np.angle(fft_y1)  #取复数的角度
+normalization_y1 = abs_y1 / N  #归一化处理（双边频谱）
+normalization_half_y1 = normalization_y1[range(int(N / 2))]  #由于对称性，只取一半区间（单边频谱）
+
+fft_y2 = fft(y2)  #快速傅里叶变换
+
+abs_y2 = np.abs(fft_y2)  # 取复数的绝对值，即复数的模(双边频谱)
+angle_y2 = np.angle(fft_y2)  #取复数的角度
+normalization_y2 = abs_y2 / N  #归一化处理（双边频谱）
+normalization_half_y2 = normalization_y2[range(int(N / 2))]  #由于对称性，只取一半区间（单边频谱）
+
+fft_y = fft(y)  #快速傅里叶变换
 
 abs_y = np.abs(fft_y)  # 取复数的绝对值，即复数的模(双边频谱)
 angle_y = np.angle(fft_y)  #取复数的角度
@@ -42,15 +61,72 @@ normalization_half_y = normalization_y[range(int(N / 2))]  #由于对称性，�
 
 #print(params)
 
+#求傅里叶变换
+z = ifft(fft_y, 20191)
+
+#只保留幅度最大的正弦分量
+f = np.argmax(normalization_half_y)
+a=normalization_half_y[f]
+y3=a*np.sin(2*np.pi*f*time)
+wave_data = y3.astype(np.short)
+#open a wav document
+wav = wave.open("D:\学习\大三上\数字信号\实验\task5\test.wav","wb")
+#set wav params
+wav.setnchannels(1)
+wav.setsampwidth(sampwidth)
+wav.setframerate(framerate)
+#turn the data to string
+wav.writeframes(wave_data.tostring())
+wav.close()
+
 plt.figure(1)
 plt.subplot(311)
-plt.plot(time, wave_data)
+plt.plot(time, y)
 plt.xlabel("时间")
 plt.title("原波形")
 
 plt.subplot(312)
-plt.plot(half_x,normalization_half_y)
+plt.plot(half_x, normalization_half_y)
 plt.xlabel("频率/HZ")
 plt.ylabel("振幅")
 plt.title('频谱')
+
+plt.subplot(313)
+plt.plot(time, z)
+plt.xlabel("时间")
+plt.title("原波形")
+
+plt.figure(2)
+
+plt.subplot(211)
+plt.plot(time1, y1)
+plt.xlabel("时间")
+plt.title("原波形")
+
+plt.subplot(212)
+plt.plot(half_x, normalization_half_y1)
+plt.xlabel("频率/HZ")
+plt.ylabel("振幅")
+plt.title('频谱')
+
+plt.figure(3)
+
+plt.subplot(211)
+plt.plot(time2, y2)
+plt.xlabel("时间")
+plt.title("原波形")
+
+plt.subplot(212)
+plt.plot(half_x, normalization_half_y2)
+plt.xlabel("频率/HZ")
+plt.ylabel("振幅")
+plt.title('频谱')
+
+plt.figure(4)
+plt.plot(time,wave_data )
+plt.xlabel("时间")
+plt.title("原波形")
+
 plt.show()
+
+# TODO:signal.chirp
