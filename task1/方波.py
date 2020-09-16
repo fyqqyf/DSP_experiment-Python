@@ -3,7 +3,7 @@ Descripttion :
 Author       : 傅宇千
 Date         : 2020-09-06 16:03:35
 LastEditors  : 傅宇千
-LastEditTime : 2020-09-14 17:32:40
+LastEditTime : 2020-09-14 21:01:38
 '''
 """
     三角函数 合成方波
@@ -15,6 +15,10 @@ from matplotlib.pylab import mpl
 mpl.rcParams['font.sans-serif'] = ['SimHei']   #显示中文
 mpl.rcParams['axes.unicode_minus']=False       #显示负号
 
+def fangbo(x,n,a,f):
+    for i in range(1, n + 1):
+        y += (4*a/np.pi) * np.sin(2*np.pi*f*(2*i-1)*x)/(2*i-1)
+    return y
 # 准备x值
 x = np.linspace(0, 0.02, 1000)
 

@@ -3,7 +3,7 @@ Descripttion :
 Author       : 傅宇千
 Date         : 2020-09-06 17:08:10
 LastEditors  : 傅宇千
-LastEditTime : 2020-09-14 17:40:49
+LastEditTime : 2020-09-14 21:09:16
 '''
 """
     三角函数 合成三角波
@@ -14,7 +14,11 @@ from matplotlib.pylab import mpl
  
 mpl.rcParams['font.sans-serif'] = ['SimHei']   #显示中文
 mpl.rcParams['axes.unicode_minus']=False       #显示负号
-
+def sanjiaobo(x,n,a,f):
+    y = np.zeros_like(x)
+    for i in range(1,n,2):
+        y+= a/i/i*np.sin(i*np.pi/2)*np.sin(2*np.pi*i*f*x)
+    return y
 # 准备x值
 x = np.linspace(0, 0.05, 2000)
 a=3*4/np.pi/np.pi*2

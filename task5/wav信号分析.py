@@ -3,7 +3,7 @@ Descripttion :
 Author       : 傅宇千
 Date         : 2020-09-08 12:27:06
 LastEditors  : 傅宇千
-LastEditTime : 2020-09-14 20:09:51
+LastEditTime : 2020-09-16 19:13:17
 '''
 '''
 Descripttion : 
@@ -25,16 +25,15 @@ mpl.rcParams['font.sans-serif'] = ['SimHei']  #显示中文
 mpl.rcParams['axes.unicode_minus'] = False  #显示负号
 
 CHUNK = 1024  # wav文件是由若干个CHUNK组成的，CHUNK我们就理解成数据包或者数据片段。
-FORMAT = paInt16  # 表示我们使用量化位数 16位来进行录音
-CHANNELS = 2  #代表的是声道，1是单声道，2是双声道。
-RATE = 44100  # 采样率 一秒内对声音信号的采集次数，常用的有8kHz, 16kHz, 32kHz, 48kHz,
-# 11.025kHz, 22.05kHz, 44.1kHz。
-RECORD_SECONDS = 5  # 录制时间这里设定了5秒
+FORMAT = paInt16  # 量化位数16位
+CHANNELS = 2  #声道是双声道。
+RATE = 44100  # 采样率
+RECORD_SECONDS = 5  # 录制时间:5秒
 
 
 def get_audio(filepath):
-    isstart = str(input("是否开始录音？ （是/否）"))  #输出提示文本，input接收一个值,转为str，赋值给aa
-    if isstart == str("是"):
+    isstart = str(input("是否开始录音？ （1/0）")) 
+    if isstart == str("1"):
         pa = PyAudio()
         stream = pa.open(format=FORMAT,
                          channels=CHANNELS,
@@ -54,7 +53,7 @@ def get_audio(filepath):
         pa.terminate()  # 终结
 
         save_wave_file(pa, filepath, frames)
-    elif isstart == str("否"):
+    elif isstart == str("0"):
         exit()
     else:
         print("无效输入，请重新选择")
@@ -76,7 +75,8 @@ get_audio(filepath)
 #打开wav文件 ，open返回一个的是一个Wave_read类的实例，通过调用它的方法读取WAV文件的格式和数据。
 f = wave.open(r"D:\学习\大三上\数字信号\实验\task5\01.wav", "rb")
 #读取格式信息
-#一次性返回所有的WAV文件的格式信息，它返回的是一个组元(tuple)：声道数, 量化位数（byte单位）, 采样频率, 采样点数, 压缩类型, 压缩类型的描述。wave模块只支持非压缩的数据，因此可以忽略最后两个信息
+#一次性返回所有的WAV文件的格式信息，它返回的是一个组元(tuple)：声道数, 量化位数（byte单位）, 采样频率, 采样点数, 压缩类型, 压缩类型的描述。
+# wave模块只支持非压缩的数据，因此可以忽略最后两个信息
 params = f.getparams()
 nchannels, sampwidth, framerate, nframes = params[:4]
 #读取波形数据
@@ -105,12 +105,14 @@ sampling_rate = framerate  #采样频率
 
 xs1 = y[0:fft_size1]  # 从波形数据中取样fft_size个点进行运算
 xf1 = np.fft.rfft(xs1) / fft_size1
+
 #通过下面的np.linspace计算出返回值中每个下标对应的真正的频率：
 freqs1 = np.linspace(0, sampling_rate / 2, fft_size1 / 2 + 1)
 xfp1 = np.abs(xf1)
 
 xs2 = y[:fft_size2]
 xf2 = np.fft.rfft(xs2) / fft_size2
+
 freqs2 = np.linspace(0, sampling_rate / 2, fft_size2 / 2 + 1)
 xfp2 = np.abs(xf2)
 
