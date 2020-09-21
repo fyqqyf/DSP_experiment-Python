@@ -7,6 +7,7 @@ Author:
 import cv2
 import math
 import numpy as np
+
 '''
 Function:
 	normalize the image value between [0.0, 1.0]

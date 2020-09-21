@@ -1,10 +1,18 @@
 '''
+Descripttion : 
+Author       : 傅宇千
+Date         : 2020-09-09 17:17:19
+LastEditors  : 傅宇千
+LastEditTime : 2020-09-21 00:26:41
+'''
+'''
 Function:
-	Implementation of "Combining Sketch and Tone for Pencil Drawing Production-Cewu Lu, Li Xu, Jiaya Jia".
+    paper named  "Combining Sketch and Tone for Pencil Drawing Production-Cewu Lu, Li Xu, Jiaya Jia".
 	This is the main function.
 Author:
 	FYQ
 '''
+
 import cfg
 import argparse
 from utils.drawing import PencilDrawing

@@ -1,20 +1,32 @@
 '''
+Descripttion : 
+Author       : 傅宇千
+Date         : 2020-09-09 17:17:20
+LastEditors  : 傅宇千
+LastEditTime : 2020-09-21 00:18:27
+'''
+
+'''
 Function:
 	Algorithm implementation.
 Author:
 	FYQ
 '''
-import cv2
 import math
+import warnings
+
 import numpy as np
 from PIL import Image
 from scipy import signal
-from utils.utils import *
 from scipy.ndimage import interpolation
-from scipy.sparse.linalg import spsolve
 from scipy.sparse import csr_matrix, spdiags
-import warnings
+from scipy.sparse.linalg import spsolve
+
+import cv2
+from utils.utils import *
+
 warnings.filterwarnings("ignore")
+
 '''pencil drawing'''
 
 
@@ -68,7 +80,9 @@ class PencilDrawing():
         h, w = img.shape
         kernel_size = int(min(w, h) * self.kernel_size_scale)
         kernel_size += kernel_size % 2
+
         # compute gradients, yielding magnitude
+        # maybe use sobel kernel will get better results
         img_double = im2double(img)
         dx = np.concatenate(
             (np.abs(img_double[:, 0:-1] - img_double[:, 1:]), np.zeros(
@@ -77,6 +91,7 @@ class PencilDrawing():
             (np.abs(img_double[0:-1, :] - img_double[1:, :]), np.zeros(
                 (1, w))), 0)
         img_gradient = np.sqrt(np.power(dx, 2) + np.power(dy, 2))
+
         # choose eight reference directions
         line_segments = np.zeros((kernel_size, kernel_size, 8))
         for i in [0, 1, 2, 7]:
@@ -92,6 +107,7 @@ class PencilDrawing():
                 else:
                     line_segments[:, :,
                                   i + 4] = np.rot90(line_segments[:, :, i], 1)
+
         # get response maps for the reference directions
         response_maps = np.zeros((h, w, 8))
         for i in range(8):
@@ -99,6 +115,7 @@ class PencilDrawing():
                                                        line_segments[:, :, i],
                                                        'same')
         response_maps_maxvalueidx = response_maps.argmax(axis=-1)
+
         # the classification is performed by selecting the maximum value among the responses in all directions
         magnitude_maps = np.zeros_like(response_maps)
         for i in range(8):
@@ -120,8 +137,10 @@ class PencilDrawing():
 
     def __toneGeneration(self, img, mode=None):
         height, width = img.shape
+
         # histogram matching
         img_hist_match = self.__histogramMatching(img, mode)**self.color_depth
+
         # get texture
         texture = cv2.imread(self.texture_path)
         texture = cv2.cvtColor(texture,
@@ -174,11 +193,13 @@ class PencilDrawing():
 
     def __histogramMatching(self, img, mode=None):
         weights = self.weights_color if mode == 'color' else self.weights_gray
+
         # img
         histogram_img = cv2.calcHist([img], [0], None, [256], [0, 256])
         histogram_img.resize(histogram_img.size)
         histogram_img /= histogram_img.sum()
         histogram_img_cdf = np.cumsum(histogram_img)
+
         # natural
         histogram_natural = np.zeros_like(histogram_img)
         for x in range(256):
@@ -186,6 +207,7 @@ class PencilDrawing():
                 x) + weights[1] * Uniform(x) + weights[2] * Gaussian(x)
         histogram_natural /= histogram_natural.sum()
         histogram_natural_cdf = np.cumsum(histogram_natural)
+        
         # do the histogram matching
         img_hist_match = np.zeros_like(img)
         for x in range(img.shape[0]):
