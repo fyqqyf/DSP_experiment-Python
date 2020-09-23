@@ -3,7 +3,7 @@ Descripttion :
 Author       : 傅宇千
 Date         : 2020-09-09 17:17:20
 LastEditors  : 傅宇千
-LastEditTime : 2020-09-21 00:18:27
+LastEditTime : 2020-09-21 14:29:19
 '''
 
 '''
@@ -66,8 +66,8 @@ class PencilDrawing():
             img_out.save(savename)
         elif mode == 'gray':
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            img_s = self.__strokeGeneration(img)
             img_t = self.__toneGeneration(img)
+            img_s = self.__strokeGeneration(img)
             img_out = img_s * img_t * 255
             img = cv2.imwrite(savename, img_out)
         else:

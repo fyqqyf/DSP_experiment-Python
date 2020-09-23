@@ -3,7 +3,7 @@ Descripttion :
 Author       : 傅宇千
 Date         : 2020-09-09 17:17:19
 LastEditors  : 傅宇千
-LastEditTime : 2020-09-21 00:26:41
+LastEditTime : 2020-09-21 14:35:13
 '''
 '''
 Function:
@@ -13,9 +13,11 @@ Author:
 	FYQ
 '''
 
-import cfg
 import argparse
+
+import cfg
 from utils.drawing import PencilDrawing
+
 '''main'''
 
 

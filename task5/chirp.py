@@ -3,7 +3,7 @@ Descripttion :
 Author       : 傅宇千
 Date         : 2020-09-14 13:33:31
 LastEditors  : 傅宇千
-LastEditTime : 2020-09-16 19:19:40
+LastEditTime : 2020-09-21 16:53:54
 '''
 from scipy.signal import chirp, spectrogram
 import matplotlib.pyplot as plt
@@ -25,10 +25,13 @@ def fft(y,sampling_rate,fft_size):
     xfp = np.abs(xf)
     return freqs,xfp
 
-y = w[0:1024]
+# y = w[0:1024]
 
-freqs,xfp=fft(y,1024/5,1024)
+# freqs,xfp=fft(y,1024/5,1024)
 
+y = w[0:2048]
+
+freqs,xfp=fft(y,2048/5,2048)
 
 plt.figure(1)
 plt.subplot(211)
