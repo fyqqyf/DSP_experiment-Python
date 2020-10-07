@@ -1,9 +1,10 @@
 '''
 Descripttion : 
-Author       : 傅宇千
+Author       : Fu Yuqian
 Date         : 2020-09-09 17:17:20
-LastEditors  : 傅宇千
-LastEditTime : 2020-09-21 00:08:40
+LastEditors  : Fu Yuqian
+LastEditTime : 2020-09-28 22:12:05
+FilePath     : \task_final\code\cfg.py
 '''
 '''
 Function:

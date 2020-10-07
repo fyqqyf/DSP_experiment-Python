@@ -1,10 +1,12 @@
 '''
 Descripttion : 
-Author       : 傅宇千
+Author       : Fu Yuqian
 Date         : 2020-09-09 17:17:19
-LastEditors  : 傅宇千
-LastEditTime : 2020-09-21 14:35:13
+LastEditors  : Fu Yuqian
+LastEditTime : 2020-09-28 22:12:24
+FilePath     : \task_final\code\main.py
 '''
+
 '''
 Function:
     paper named  "Combining Sketch and Tone for Pencil Drawing Production-Cewu Lu, Li Xu, Jiaya Jia".
